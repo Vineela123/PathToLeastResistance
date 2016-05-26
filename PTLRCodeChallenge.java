@@ -27,7 +27,7 @@ public class PTLRCodeChallenge {
 						Preconditions.Matrix[i][j] = sc.nextInt();}}
 				possiblePattern = Preconditions.Matrix[0][0];
 				ObjectPile = new Stack<MatrixObject>();
-				TempPath = succesPath = "1";
+				TempPath = succesPath = Integer.toString(1);
 				PathToResistance(0, 0, succesPath);
 				if (isOnlyonepath) {
 					System.out.println("Yes, Water made it all the way through the grid \n "+" Total Resistance: "+ Preconditions.totalResistanceT+"\n"+" Path: "+ TempPath);
@@ -96,7 +96,7 @@ public class PTLRCodeChallenge {
 						&& (possiblePattern + Preconditions.Matrix[FirstD + 1][SecondD + 1] < Preconditions.totalResistanceT)) {
 					tempPath = path;
 					tempPath = path.concat(" " + Integer.toString(FirstD + 2));
-					ObjectPile.push(matrixInflate(FirstD + 11, SecondD + 1,
+					ObjectPile.push(matrixInflate(FirstD + 1, SecondD + 1,
 							(possiblePattern + Preconditions.Matrix[FirstD + 1][SecondD + 1]), tempPath));
 				}
 			}
@@ -118,30 +118,35 @@ public class PTLRCodeChallenge {
 		return object;
 	}
 	private static void PathToResistance(int FirstD, int SecondD, String path) {
-		calcuatedResistancePath(FirstD, SecondD, path);
-		while (!ObjectPile.isEmpty()) {
-			MatrixObject cPos = ObjectPile.pop();
-			possiblePattern = cPos.getCalculatedResistance();
-			Preconditions.totalResistanceF = (Preconditions.totalResistanceF < possiblePattern) ? possiblePattern
-					: Preconditions.totalResistanceF;
-			succesPath = cPos.getPtlr();
-			FailedPath = succesPath;
-			if (cPos.getSecond_dimension() < (Preconditions.NO_COLUMN - 1))
-				PathToResistance(cPos.getFirst_dimension(), cPos.getSecond_dimension(), FailedPath);
-			else {
-				if (isOnlyonepath) {
-					if (Preconditions.totalResistanceT > possiblePattern) {
+		try {
+			calcuatedResistancePath(FirstD, SecondD, path);
+			while (!ObjectPile.isEmpty()) {
+				MatrixObject cPos = ObjectPile.pop();
+				if(cPos!=null){
+				possiblePattern = cPos.getCalculatedResistance();
+				Preconditions.totalResistanceF = (Preconditions.totalResistanceF < possiblePattern) ? possiblePattern
+						: Preconditions.totalResistanceF;
+				succesPath = cPos.getPtlr();
+				FailedPath = succesPath;
+				if (cPos.getSecond_dimension() < (Preconditions.NO_COLUMN - 1))
+					PathToResistance(cPos.getFirst_dimension(), cPos.getSecond_dimension(), cPos.getPtlr());
+				else {
+					if (isOnlyonepath) {
+						if (Preconditions.totalResistanceT > possiblePattern) {
+							Preconditions.totalResistanceT = possiblePattern;
+							TempPath = succesPath;
+						}
+					} else {
 						Preconditions.totalResistanceT = possiblePattern;
 						TempPath = succesPath;
+						isOnlyonepath = true;
 					}
-				} else {
-					Preconditions.totalResistanceT = possiblePattern;
-					TempPath = succesPath;
-					isOnlyonepath = true;
 				}
 			}
-		}
-		possiblePattern = 0;
-		succesPath = "";
+			possiblePattern = 0;
+			succesPath = "";}
+		}catch (Exception e){
+			e.printStackTrace();
+			}
 	}
 }
