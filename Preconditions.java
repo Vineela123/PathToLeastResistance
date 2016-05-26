@@ -9,8 +9,8 @@ public class Preconditions {
     public static int NO_ROW=0;
     public static int NO_COLUMN=0;
     public static int Matrix[][];
-public static  int totalResistanceT;
-    public static int totalResistanceF;
+public static  int totalResistanceT=Integer.MAX_VALUE;
+    public static int totalResistanceF=Integer.MIN_VALUE;
     public static boolean validate_rowLimit(int inputRow){
         if(inputRow >= 1 && inputRow <= 10){
             Preconditions.NO_ROW=inputRow;
